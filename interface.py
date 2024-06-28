@@ -74,7 +74,7 @@ class Cli():
         else:
             self.invalid(user_input)
 
-    def place(self, arguments: list[str]) -> None:
+    def place(self, arguments: list) -> None:
         """
         Perform the place function by parsing the user input into a location
         and direction.

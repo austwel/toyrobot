@@ -1,7 +1,7 @@
 """Module providing unit testing capabilities"""
 import unittest
 
-from core import ToyRobot, Direction
+from ..core import ToyRobot, Direction
 
 class TestPlacement(unittest.TestCase):
     """

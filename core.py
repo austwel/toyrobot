@@ -4,7 +4,6 @@ This module is commonly used by interfaces to provide the core functionality.
 """
 
 from enum import Enum
-from typing import Self
 
 class Direction(Enum):
     '''Enum-like implementation of directions, allowing rotation methods'''
@@ -17,7 +16,7 @@ class Direction(Enum):
     WEST = (-1, 0)
     '''The west direction'''
 
-    def clockwise(self) -> Self:
+    def clockwise(self):
         """Rotate the given direction by 90 degrees clockwise.
 
         Returns:
@@ -27,7 +26,7 @@ class Direction(Enum):
         index = members.index(self) + 1
         return members[index % len(members)]
 
-    def counterclockwise(self) -> Self:
+    def counterclockwise(self):
         """Rotate the given direction by 90 degrees counter-clockwise.
 
         Returns:
@@ -64,12 +63,12 @@ class ToyRobot():
     Args:
         None
     """
-    location: tuple[int, int] = None
+    location: tuple = None
     direction: Direction = None
     WIDTH: int = 5
     HEIGHT: int = 5
 
-    def place(self, location: tuple[int, int], direction: Direction) -> bool:
+    def place(self, location: tuple, direction: Direction) -> bool:
         """
         Place the toy robot at the given location, replacing the older
         instance if it exists.    
@@ -95,7 +94,7 @@ class ToyRobot():
             bool: If the movement was valid, safe to ignore.
         """
         if self.direction is None:
-            return
+            return False
         new_location = tuple(map(lambda a, b: a + b, self.location, self.direction.value))
         if not 0 <= new_location[0] < self.WIDTH or not 0 <= new_location[1] < self.HEIGHT:
             return False
@@ -114,7 +113,7 @@ class ToyRobot():
             return
         self.direction = Direction.clockwise(self.direction)
 
-    def report(self) -> tuple[tuple[int, int], Direction]:
+    def report(self) -> tuple:
         """Display the current status of the toy robot.
 
         Returns:

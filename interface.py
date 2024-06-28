@@ -3,7 +3,7 @@ Module to handle cli implementations of the toy robot demonstration. The base
 class 'cli'
 """
 
-from core import ToyRobot, Direction
+from .core import ToyRobot, Direction
 
 class Cli():
     """Implementation of interfacing with the toy robot via command-line.

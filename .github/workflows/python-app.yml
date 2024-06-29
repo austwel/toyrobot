@@ -57,8 +57,8 @@ jobs:
       with:
         name: toyrobot
         path: |
-          release.zip
-          !venv/
+          server/release.zip
+          !server/venv/
 
   deploy:
     runs-on: ubuntu-latest

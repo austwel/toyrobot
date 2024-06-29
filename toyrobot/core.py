@@ -124,6 +124,8 @@ class ToyRobot():
         Returns:
             bool: If the placement was valid, safe to ignore.
         """
+        if location[0] is None or location[1] is None:
+            return False
         if not 0 <= location[0] < self.WIDTH or not 0 <= location[1] < self.HEIGHT:
             return False
         self.location, self.direction = location, direction

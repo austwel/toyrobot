@@ -32,6 +32,8 @@ def place():
 
     try:
         location = (request.args.get('x', type=int), request.args.get('y', type=int))
+        if location[0] is None or location[1] is None:
+            raise ValueError
     except ValueError:
         return "Location parameters invalid", 400
 

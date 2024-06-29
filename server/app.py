@@ -37,7 +37,7 @@ def place():
     try:
         direction = Direction[request.args.get('direction').upper()]
     except (KeyError, AttributeError):
-        return "Direction parameter invalid", 400
+        direction = Direction.EAST
 
     if robot.place(location, direction):
         session['robot_state'] = robot.dump_state()

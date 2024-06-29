@@ -6,6 +6,7 @@ This module is commonly used by interfaces to provide the core functionality.
 from enum import Enum
 import json
 
+
 class Direction(Enum):
     '''Enum-like implementation of directions, allowing rotation methods'''
     NORTH = (0, 1)
@@ -54,6 +55,7 @@ class Direction(Enum):
             str: Plain name for the direction [North, East, South, West]
         """
         return self.name
+
 
 class ToyRobot():
     """Main toy robot class that handes the functionality.

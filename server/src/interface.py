@@ -16,21 +16,21 @@ class Cli():
     """
 
     HELP_STRING = \
-    'PLACE X,Y,FACING   Will put the toy robot on the table in position X,Y\n' + \
-    '                   and facing NORTH, SOUTH, EAST or WEST.\n' + \
-    '                   The origin (0,0) can be considered to be the SOUTH\n' + \
-    '                   WEST most corner.\n' + \
-    '                   The first valid command to the robot is a PLACE\n' + \
-    '                   command, after that, any sequence of commands may\n' + \
-    '                   be issued, in any order, including another PLACE\n' + \
-    '                   command.\n' + \
-    'MOVE               Will move the toy robot one unit forward in the\n' + \
-    '                   direction it is currently facing.\n' + \
-    'LEFT               Will rotate the robot 90 degrees counter-clockwise\n' + \
-    '                   without changing the position of the robot.\n' + \
-    'RIGHT              Will rotate the robot 90 degrees clockwise without\n' + \
-    '                   changing the position of the robot.\n' + \
-    'REPORT             Will announce the X,Y and F of the robot.'
+        'PLACE X,Y,FACING   Will put the toy robot on the table in position X,Y\n' + \
+        '                   and facing NORTH, SOUTH, EAST or WEST.\n' + \
+        '                   The origin (0,0) can be considered to be the SOUTH\n' + \
+        '                   WEST most corner.\n' + \
+        '                   The first valid command to the robot is a PLACE\n' + \
+        '                   command, after that, any sequence of commands may\n' + \
+        '                   be issued, in any order, including another PLACE\n' + \
+        '                   command.\n' + \
+        'MOVE               Will move the toy robot one unit forward in the\n' + \
+        '                   direction it is currently facing.\n' + \
+        'LEFT               Will rotate the robot 90 degrees counter-clockwise\n' + \
+        '                   without changing the position of the robot.\n' + \
+        'RIGHT              Will rotate the robot 90 degrees clockwise without\n' + \
+        '                   changing the position of the robot.\n' + \
+        'REPORT             Will announce the X,Y and F of the robot.'
 
     def __init__(self) -> None:
         """
@@ -43,7 +43,7 @@ class Cli():
         Parse given commands via standard input.
         """
         command = None
-        while command != 'quit' :
+        while command != 'quit':
             command = input('> ').lower().strip()
             self.parse(command)
 
@@ -80,7 +80,7 @@ class Cli():
         and direction.
 
         Args:
-            arguments (list[str]): 
+            arguments (list[str]):
                 List of arguments given with the PLACE command. One argument in
                 the {X,Y,FACING} format can be parsed along with three arguments
                 in the {X Y FACING} format.
@@ -138,10 +138,11 @@ class Cli():
         """
         print(f"'{message}' is not recognised. Type 'help' for help.")
 
+
 class CliVisualiser(Cli):
     """A child of the Cli class which also displays a grid visualisation of the
     toy robot.
-    
+
     Attributes:
         _buffer: A private string to append after the next cls function
     """
@@ -190,6 +191,7 @@ class CliVisualiser(Cli):
 
     def invalid(self, message) -> None:
         self._buffer = f"'{message}' is not recognised. Type 'help' for help."
+
 
 if __name__ == '__main__':
     CliVisualiser().run()

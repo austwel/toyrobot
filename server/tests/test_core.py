@@ -1,8 +1,8 @@
 """Module providing unit testing capabilities"""
 import unittest
 import json
-
 from ..src.core import ToyRobot, Direction
+
 
 class TestInit(unittest.TestCase):
     """
@@ -20,6 +20,7 @@ class TestInit(unittest.TestCase):
         toyrobot = ToyRobot(state)
         self.assertEqual(toyrobot.location, (1, 3))
         self.assertEqual(toyrobot.direction, Direction.SOUTH)
+
 
 class TestPlacement(unittest.TestCase):
     """
@@ -47,6 +48,7 @@ class TestPlacement(unittest.TestCase):
         self.toyrobot.place((8, 16), Direction.WEST)
         self.assertNotEqual(self.toyrobot.location, (8, 16))
         self.assertNotEqual(self.toyrobot.direction, Direction.WEST)
+
 
 class TestMovement(unittest.TestCase):
     """
@@ -94,6 +96,7 @@ class TestMovement(unittest.TestCase):
         self.toyrobot.move()
         self.assertEqual(self.toyrobot.location, (2, 2))
 
+
 class TestBoundaries(unittest.TestCase):
     """
     A class to test moving the robot outside the boundaries of the plane.
@@ -105,7 +108,7 @@ class TestBoundaries(unittest.TestCase):
 
     def test_rightwall(self):
         '''
-        Move the robot forwards towards the east wall, 
+        Move the robot forwards towards the east wall,
         ensure it stops at the end of the plane
         '''
         self.toyrobot.move()
@@ -118,7 +121,7 @@ class TestBoundaries(unittest.TestCase):
 
     def test_leftwall(self):
         '''
-        Move the robot forwards towards the west wall, 
+        Move the robot forwards towards the west wall,
         ensure it stops at the end of the plane
         '''
         self.toyrobot.left()
@@ -133,7 +136,7 @@ class TestBoundaries(unittest.TestCase):
 
     def test_ceiling(self):
         '''
-        Move the robot forwards towards the north wall, 
+        Move the robot forwards towards the north wall,
         ensure it stops at the end of the plane
         '''
         self.toyrobot.left()
@@ -147,7 +150,7 @@ class TestBoundaries(unittest.TestCase):
 
     def test_floor(self):
         '''
-        Move the robot forwards towards the south wall, 
+        Move the robot forwards towards the south wall,
         ensure it stops at the end of the plane
         '''
         self.toyrobot.right()
@@ -158,6 +161,7 @@ class TestBoundaries(unittest.TestCase):
         self.toyrobot.move()
         self.toyrobot.move()
         self.assertEqual(self.toyrobot.location, (2, 0))
+
 
 if __name__ == '__main__':
     unittest.main()

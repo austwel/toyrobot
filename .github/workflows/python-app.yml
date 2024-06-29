@@ -48,3 +48,54 @@ jobs:
     - name: Test with pytest
       run: |
         pytest
+
+    - name: Zip artifact for deployment
+      run: zip release.zip ./* -r
+
+    - name: Upload artifact for deployment jobs
+      uses: actions/upload-artifact@v4
+      with:
+        name: toyrobot
+        path: |
+          release.zip
+          !venv/
+
+  deploy:
+    runs-on: ubuntu-latest
+
+    needs: build
+
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    defaults:
+      run:
+        working-directory: ./server
+
+    permissions:
+      id-token: write #This is required for requesting the JWT
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v4
+        with:
+          name: toyrobot
+
+      - name: Unzip artifact for deployment
+        run: unzip release.zip
+
+      
+      - name: Login to Azure
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_0362CB13AE954554AA1CE5C7DAAC4140 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_1F8E683683694DC8BB0A7329761A3289 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_065AAD8D6D7445519B70A7123C4979AF }}
+
+      - name: 'Deploy to Azure Web App'
+        uses: azure/webapps-deploy@v3
+        id: deploy-to-webapp
+        with:
+          app-name: 'toyrobot-webapp'
+          slot-name: 'Production'

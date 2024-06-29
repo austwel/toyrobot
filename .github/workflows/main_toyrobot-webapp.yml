@@ -14,10 +14,6 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    defaults:
-      run:
-        working-directory: ./server
-
     steps:
       - uses: actions/checkout@v4
 
@@ -42,7 +38,8 @@ jobs:
         with:
           name: toyrobot
           path: |
-            server/release.zip
+            release.zip
+            !venv/
 
   deploy:
     runs-on: ubuntu-latest

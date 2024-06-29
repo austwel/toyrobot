@@ -1,7 +1,7 @@
 """Module providing unit testing capabilities"""
 import unittest
 import json
-from ..toyrobot.core import ToyRobot, Direction
+from toyrobot.core import ToyRobot, Direction
 
 
 class TestInit(unittest.TestCase):

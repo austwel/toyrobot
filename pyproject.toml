@@ -6,4 +6,4 @@ authors = [
 dependencies = [
     "flask",
 ]
-dynamic = ["version"]
+version = "1.0.0"

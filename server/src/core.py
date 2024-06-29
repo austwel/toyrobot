@@ -4,6 +4,7 @@ This module is commonly used by interfaces to provide the core functionality.
 """
 
 from enum import Enum
+import json
 
 class Direction(Enum):
     '''Enum-like implementation of directions, allowing rotation methods'''
@@ -34,6 +35,16 @@ class Direction(Enum):
         """
         members = list(self.__class__)
         index = members.index(self) - 1
+        return members[index % len(members)]
+
+    @staticmethod
+    def from_integer(index: int):
+        """Get a direction value by serialisable integer index.
+        
+        Returns:
+            Direction: Direction of index given
+        """
+        members = list(Direction)
         return members[index % len(members)]
 
     def __str__(self) -> str:
@@ -67,6 +78,35 @@ class ToyRobot():
     direction: Direction = None
     WIDTH: int = 5
     HEIGHT: int = 5
+
+    def __init__(self, state = None) -> None:
+        """Initialise toy robot object
+
+        Args:
+            state (json):
+            An optional robot state to initialise. Provided in the form
+            {'location': {'x': 1, 'y': 2}, 'direction', 0}
+        """
+        if state is not None:
+            robot_state = json.loads(state)
+            self.place(
+                (robot_state['location']['x'], robot_state['location']['y']),
+                Direction[str(robot_state['direction']).upper()]
+            )
+
+    def dump_state(self) -> str:
+        """Helper function to dump the state into a json format for serialising.
+
+        Returns:
+            str: State
+        """
+        return json.dumps({
+            'location': {
+                'x': self.location[0],
+                'y': self.location[1]
+            },
+            'direction': str(self.direction)
+        })
 
     def place(self, location: tuple, direction: Direction) -> bool:
         """

@@ -1,0 +1,9 @@
+[project]
+name = "toyrobot"
+authors = [
+    {name = "Max Schulze", email = "max@austwel.xyz"},
+]
+dependencies = [
+    "flask",
+]
+dynamic = ["version"]

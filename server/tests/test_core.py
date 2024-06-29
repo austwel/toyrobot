@@ -1,7 +1,25 @@
 """Module providing unit testing capabilities"""
 import unittest
+import json
 
-from ..core import ToyRobot, Direction
+from ..src.core import ToyRobot, Direction
+
+class TestInit(unittest.TestCase):
+    """
+    A class to test initialising the toy robot object.
+    """
+    def test_initless(self):
+        '''Initialise a new toy robot and ensure it has null attributes'''
+        toyrobot = ToyRobot()
+        self.assertEqual(toyrobot.location, None)
+        self.assertEqual(toyrobot.direction, None)
+
+    def test_init(self):
+        '''Initialise a new toy robot and ensure it has valid attributes'''
+        state = json.dumps({'location': {'x': 1, 'y': 3}, 'direction': 'SOUTH'})
+        toyrobot = ToyRobot(state)
+        self.assertEqual(toyrobot.location, (1, 3))
+        self.assertEqual(toyrobot.direction, Direction.SOUTH)
 
 class TestPlacement(unittest.TestCase):
     """

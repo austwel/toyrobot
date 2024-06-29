@@ -4,7 +4,7 @@
 import os
 from flask import Flask, session, request, jsonify
 from dotenv import load_dotenv
-from server.src.core import ToyRobot, Direction
+from toyrobot.core import ToyRobot, Direction
 load_dotenv()
 
 app = Flask(__name__)

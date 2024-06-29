@@ -10,6 +10,15 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
 
+@app.route("/", methods=['GET'])
+def index():
+    """Hello world-like route to check if service is running.
+
+    Returns:
+        tuple[str, int]: HTTP Response
+    """
+    return "Hello, World!", 200
+
 @app.route("/place", methods=['POST'])
 def place():
     """Place the robot in a new state, take parameters 'x', 'y' and 'direction'

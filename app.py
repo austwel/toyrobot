@@ -2,7 +2,7 @@
 """
 
 import os
-from flask import Flask, session, request, jsonify, send_from_directory
+from flask import Flask, session, request, jsonify
 from dotenv import load_dotenv
 from toyrobot.core import ToyRobot, Direction
 load_dotenv()

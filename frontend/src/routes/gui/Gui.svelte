@@ -14,11 +14,11 @@
 
 		let method = ''
 		if (key === 'Left') {
-			method = './left'
+			method = 'https://toyrobot-webapp.azurewebsites.net/left'
 		} else if (key === 'Right') {
-			method = './right'
+			method = 'https://toyrobot-webapp.azurewebsites.net/right'
 		} else if (key === 'Move') {
-			method = './move'
+			method = 'https://toyrobot-webapp.azurewebsites.net/move'
 		}
 		await fetch(method, {method: 'POST'})
 		updater++
@@ -30,13 +30,13 @@
 		)
 		const x = key?.split(',')[0]
 		const y = key?.split(',')[1]
-		await fetch('./place?x='+x+'&y='+y+'&direction='+direction, {method: 'POST'})
+		await fetch('https://toyrobot-webapp.azurewebsites.net/place?x='+x+'&y='+y+'&direction='+direction, {method: 'POST'})
 		updater++
 	}
 
 	async function report() {
 		try {
-			const res = await fetch('./report', {method: 'GET'})
+			const res = await fetch('https://toyrobot-webapp.azurewebsites.net/report', {method: 'GET'})
 			const text = await res.text()
 			const state = JSON.parse(text)
 			if('location' in state) {

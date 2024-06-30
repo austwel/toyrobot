@@ -5,11 +5,10 @@ export default defineConfig({
 	plugins: [sveltekit()],
 	server: {
 		proxy: {
-			'/left': 'https://toyrobot-webapp.azurewebsites.net',
-			'/right': 'https://toyrobot-webapp.azurewebsites.net',
-			'/move': 'https://toyrobot-webapp.azurewebsites.net',
-			'/place': 'https://toyrobot-webapp.azurewebsites.net',
-			'/report': 'https://toyrobot-webapp.azurewebsites.net',
+			'/left': 'http://127.0.0.1:5000',
+			'/right': 'http://127.0.0.1:5000',
+			'/move': 'http://127.0.0.1:5000',
+			'/place': 'http://127.0.0.1:5000'
 		}
 	}
 });

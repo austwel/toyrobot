@@ -2,6 +2,7 @@
 """
 
 import os
+import json
 from flask import Flask, session, request, jsonify
 from dotenv import load_dotenv
 from toyrobot.core import ToyRobot, Direction
@@ -35,8 +36,9 @@ def place():
         direction = Direction.EAST
 
     if robot.place(location, direction):
-        session['robot_state'] = robot.dump_state()
-        return {"message": "Success"}, 200
+        state = robot.dump_state()
+        session['robot_state'] = state
+        return {"message": "Success", "state": json.loads(state)}, 200
     return {"message": "Bad Request"}, 400
 
 @app.route("/move", methods=['POST'])
@@ -48,10 +50,21 @@ def move():
     """
     if 'robot_state' in session:
         robot = ToyRobot(session['robot_state'])
-        status = robot.move()
-        session['robot_state'] = robot.dump_state()
-        return {"message": "Moved"} if status else {"message": "Ignored"}, 200
-    return {"message": "Bad Request"}, 400
+    elif 'state' in request.args:
+        robot = ToyRobot({
+            'location': {
+                'x': request.args.get('state', str)[0],
+                'y': request.args.get('state', str)[1],
+            },
+            'direction': request.args.get('state', str)[2:]
+        })
+    else:
+        return {"message": "Bad Request"}, 400
+    status = robot.move()
+    state = robot.dump_state()
+    session['robot_state'] = state
+    return {"message": "Moved", "state": json.loads(state)} \
+    if status else {"message": "Ignored", "state": json.loads(state)}, 200
 
 @app.route("/left", methods=['POST'])
 def left():
@@ -62,10 +75,20 @@ def left():
     """
     if 'robot_state' in session:
         robot = ToyRobot(session['robot_state'])
-        robot.left()
-        session['robot_state'] = robot.dump_state()
-        return {"message": "Success"}, 200
-    return {"message": "Bad Request"}, 400
+    elif 'state' in request.args:
+        robot = ToyRobot({
+            'location': {
+                'x': request.args.get('state', str)[0],
+                'y': request.args.get('state', str)[1],
+            },
+            'direction': request.args.get('state', str)[2:]
+        })
+    else:
+        return {"message": "Bad Request"}, 400
+    robot.left()
+    state = robot.dump_state()
+    session['robot_state'] = state
+    return {"message": "Success", "state": json.loads(state)}, 200
 
 @app.route("/right", methods=['POST'])
 def right():
@@ -76,10 +99,20 @@ def right():
     """
     if 'robot_state' in session:
         robot = ToyRobot(session['robot_state'])
-        robot.right()
-        session['robot_state'] = robot.dump_state()
-        return {"message": "Success"}, 200
-    return {"message": "Bad Request"}, 400
+    elif 'state' in request.args:
+        robot = ToyRobot({
+            'location': {
+                'x': request.args.get('state', str)[0],
+                'y': request.args.get('state', str)[1],
+            },
+            'direction': request.args.get('state', str)[2:]
+        })
+    else:
+        return {"message": "Bad Request"}, 400
+    robot.right()
+    state = robot.dump_state()
+    session['robot_state'] = state
+    return {"message": "Success", "state": json.loads(state)}, 200
 
 @app.route("/report", methods=['GET'])
 def report():
@@ -90,6 +123,16 @@ def report():
     """
     if 'robot_state' in session:
         robot = ToyRobot(session['robot_state'])
-        response = {'location': robot.location, 'direction': str(robot.direction)}
-        return jsonify(response), 200
-    return {"message": "Bad Request"}, 400
+    elif 'state' in request.args:
+        robot = ToyRobot({
+            'location': {
+                'x': request.args.get('state', str)[0],
+                'y': request.args.get('state', str)[1],
+            },
+            'direction': request.args.get('state', str)[2:]
+        })
+    else:
+        return {"message": "Bad Request"}, 400
+    state = robot.dump_state()
+    response = {'location': robot.location, 'direction': str(robot.direction), "state": json.loads(state)}
+    return jsonify(response), 200

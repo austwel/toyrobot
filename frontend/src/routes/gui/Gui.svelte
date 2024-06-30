@@ -2,8 +2,8 @@
 
 	$: blocked = false; //TODO fade out the move button if against the edge
 
-	$: x = 0
-	$: y = 0
+	$: x = null
+	$: y = null
 	$: direction = 'EAST'
 	let updater = 0
 
@@ -12,15 +12,24 @@
 			'data-key'
 		);
 
+		const state = `${x}${y}${direction}`
+
 		let method = ''
 		if (key === 'Left') {
-			method = 'https://toyrobot-webapp.azurewebsites.net/left'
+			method = 'https://toyrobot-webapp.azurewebsites.net/left?state='+state
 		} else if (key === 'Right') {
-			method = 'https://toyrobot-webapp.azurewebsites.net/right'
+			method = 'https://toyrobot-webapp.azurewebsites.net/right?state='+state
 		} else if (key === 'Move') {
-			method = 'https://toyrobot-webapp.azurewebsites.net/move'
+			method = 'https://toyrobot-webapp.azurewebsites.net/move?state='+state
 		}
-		await fetch(method, {method: 'POST'})
+		const res = await fetch(method, {method: 'POST'})
+		const res_json = await res.json()
+		console.log(res_json)
+		if(res.ok) {
+			x = res_json.state.location.x
+			y = res_json.state.location.y
+			direction = res_json.state.direction
+		}
 		updater++
 	}
 
@@ -28,34 +37,18 @@
 		const key = (event.target as HTMLButtonElement).getAttribute(
 			'data-key'
 		)
-		const x = key?.split(',')[0]
-		const y = key?.split(',')[1]
-		await fetch('https://toyrobot-webapp.azurewebsites.net/place?x='+x+'&y='+y+'&direction='+direction, {method: 'POST'})
-		updater++
-	}
-
-	async function report() {
-		try {
-			const res = await fetch('https://toyrobot-webapp.azurewebsites.net/report', {method: 'GET'})
-			const text = await res.text()
-			const state = JSON.parse(text)
-			if('location' in state) {
-				x = state.location[0]
-				y = state.location[1]
-				direction = state.direction
-			} else {
-				x = 0
-				y = 0
-				direction = 'EAST'
-			}
-			return state
-		} catch (error) {
-			const state = {
-				error: true
-			}
-			return state
-		}
 		
+		const place_x = key?.split(',')[0]
+		const place_y = key?.split(',')[1]
+		const res = await fetch('https://toyrobot-webapp.azurewebsites.net/place?x='+place_x+'&y='+place_y+'&direction='+direction, {method: 'POST'})
+		const res_json = await res.json()
+		console.log(res_json)
+		if(res.ok) {
+			x = res_json.state.location.x
+			y = res_json.state.location.y
+			direction = res_json.state.direction
+		}
+		updater++
 	}
 
 	function keydown(event: KeyboardEvent) {
@@ -82,60 +75,24 @@
 
 {#key updater}
 <div class="grid">
-	{#await report()}
-		{#each Array.from(Array(5).keys()) as row (row)}
-		<h2 class="visually-hidden">Row {row + 1}</h2>
-		<div class="row">
-			{#each Array.from(Array(5).keys()) as column (column)}
-				<button
-					on:click={place}
-					class="cell"
-					data-key="{column},{4-row}"
-				>
-					{' '}
-					<span class="visually-hidden">
-						empty
-					</span>
-				</button>
-			{/each}
-		</div>
+	{#each Array.from(Array(5).keys()) as row (row)}
+	<h2 class="visually-hidden">Row {row + 1}</h2>
+	<div class="row">
+		{#each Array.from(Array(5).keys()) as column (column)}
+			{@const value = x === column && y === 4-row ? (direction === 'NORTH' ? '^' : direction === 'EAST' ? '>' : direction === 'SOUTH' ? 'v' : '<') : ''}
+			<button
+				on:click={place}
+				class="cell"
+				data-key="{column},{4-row}"
+			>
+				{value}
+				<span class="visually-hidden">
+					empty
+				</span>
+			</button>
 		{/each}
-	{:then state}
-		{#each Array.from(Array(5).keys()) as row (row)}
-		<h2 class="visually-hidden">Row {row + 1}</h2>
-		<div class="row">
-			{#each Array.from(Array(5).keys()) as column (column)}
-			{#if 'location' in state}
-				{@const x = state.location[0]}
-				{@const y = state.location[1]}
-				{@const direction = state.direction}
-				{@const value = x === column && y === 4-row ? (direction === 'NORTH' ? '^' : direction === 'EAST' ? '>' : direction === 'SOUTH' ? 'v' : '<') : ''}
-				<button
-					on:click={place}
-					class="cell"
-					data-key="{column},{4-row}"
-				>
-					{value}
-					<span class="visually-hidden">
-						empty
-					</span>
-				</button>
-			{:else}
-				<button
-					on:click={place}
-					class="cell"
-					data-key="{column},{4-row}"
-				>
-					{' '}
-					<span class="visually-hidden">
-						empty
-					</span>
-				</button>
-				{/if}
-			{/each}
-		</div>
-		{/each}
-	{/await}
+	</div>
+	{/each}
 </div>
 {/key}
 <br>

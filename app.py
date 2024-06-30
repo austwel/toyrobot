@@ -51,13 +51,14 @@ def move():
     if 'robot_state' in session:
         robot = ToyRobot(session['robot_state'])
     elif 'state' in request.args:
-        robot = ToyRobot({
+        input_state = request.args.get('state', str)
+        robot = ToyRobot(json.dumps({
             'location': {
-                'x': request.args.get('state', str)[0],
-                'y': request.args.get('state', str)[1],
+                'x': input_state[0],
+                'y': input_state[1],
             },
-            'direction': request.args.get('state', str)[2:]
-        })
+            'direction': input_state[2:]
+        }))
     else:
         return {"message": "Bad Request"}, 400
     status = robot.move()
@@ -76,13 +77,14 @@ def left():
     if 'robot_state' in session:
         robot = ToyRobot(session['robot_state'])
     elif 'state' in request.args:
-        robot = ToyRobot({
+        input_state = request.args.get('state', str)
+        robot = ToyRobot(json.dumps({
             'location': {
-                'x': request.args.get('state', str)[0],
-                'y': request.args.get('state', str)[1],
+                'x': input_state[0],
+                'y': input_state[1],
             },
-            'direction': request.args.get('state', str)[2:]
-        })
+            'direction': input_state[2:]
+        }))
     else:
         return {"message": "Bad Request"}, 400
     robot.left()
@@ -100,13 +102,14 @@ def right():
     if 'robot_state' in session:
         robot = ToyRobot(session['robot_state'])
     elif 'state' in request.args:
-        robot = ToyRobot({
+        input_state = request.args.get('state', str)
+        robot = ToyRobot(json.dumps({
             'location': {
-                'x': request.args.get('state', str)[0],
-                'y': request.args.get('state', str)[1],
+                'x': input_state[0],
+                'y': input_state[1],
             },
-            'direction': request.args.get('state', str)[2:]
-        })
+            'direction': input_state[2:]
+        }))
     else:
         return {"message": "Bad Request"}, 400
     robot.right()
@@ -123,16 +126,11 @@ def report():
     """
     if 'robot_state' in session:
         robot = ToyRobot(session['robot_state'])
-    elif 'state' in request.args:
-        robot = ToyRobot({
-            'location': {
-                'x': request.args.get('state', str)[0],
-                'y': request.args.get('state', str)[1],
-            },
-            'direction': request.args.get('state', str)[2:]
-        })
     else:
         return {"message": "Bad Request"}, 400
     state = robot.dump_state()
-    response = {'location': robot.location, 'direction': str(robot.direction), "state": json.loads(state)}
+    response = {
+        'location': robot.location, 
+        'direction': str(robot.direction), 
+        "state": json.loads(state)}
     return jsonify(response), 200

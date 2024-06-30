@@ -81,18 +81,18 @@ class ToyRobot():
     WIDTH: int = 5
     HEIGHT: int = 5
 
-    def __init__(self, state = None) -> None:
+    def __init__(self, state: str = None) -> None:
         """Initialise toy robot object
 
         Args:
-            state (json):
+            state (str):
             An optional robot state to initialise. Provided in the form
-            {'location': {'x': 1, 'y': 2}, 'direction', 0}
+            {'location': {'x': 1, 'y': 2}, 'direction': 'EAST'}
         """
         if state is not None:
             robot_state = json.loads(state)
             self.place(
-                (robot_state['location']['x'], robot_state['location']['y']),
+                (int(robot_state['location']['x']), int(robot_state['location']['y'])),
                 Direction[str(robot_state['direction']).upper()]
             )
 

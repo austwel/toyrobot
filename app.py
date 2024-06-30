@@ -11,14 +11,6 @@ load_dotenv()
 app = Flask(__name__)
 app.secret_key = os.getenv('SECRET_KEY')
 
-@app.route("/", methods=['GET'])
-def index():
-    """Hello world-like route to check if service is running.
-
-    Returns:
-        tuple[str, int]: HTTP Response
-    """
-    return "Hello, World!", 200
 
 @app.route("/place", methods=['POST'])
 def place():
@@ -35,7 +27,7 @@ def place():
         if location[0] is None or location[1] is None:
             raise ValueError
     except ValueError:
-        return "Location parameters invalid", 400
+        return {"message": "Location Parameters invalid"}, 400
 
     try:
         direction = Direction[request.args.get('direction').upper()]
@@ -44,8 +36,8 @@ def place():
 
     if robot.place(location, direction):
         session['robot_state'] = robot.dump_state()
-        return "Success", 200
-    return "Bad Request", 400
+        return {"message": "Success"}, 200
+    return {"message": "Bad Request"}, 400
 
 @app.route("/move", methods=['POST'])
 def move():
@@ -58,8 +50,8 @@ def move():
         robot = ToyRobot(session['robot_state'])
         status = robot.move()
         session['robot_state'] = robot.dump_state()
-        return "Moved" if status else "Ignored", 200
-    return "Bad Request", 400
+        return {"message": "Moved"} if status else {"message": "Ignored"}, 200
+    return {"message": "Bad Request"}, 400
 
 @app.route("/left", methods=['POST'])
 def left():
@@ -72,8 +64,8 @@ def left():
         robot = ToyRobot(session['robot_state'])
         robot.left()
         session['robot_state'] = robot.dump_state()
-        return "Success", 200
-    return "Bad Request", 400
+        return {"message": "Success"}, 200
+    return {"message": "Bad Request"}, 400
 
 @app.route("/right", methods=['POST'])
 def right():
@@ -86,8 +78,8 @@ def right():
         robot = ToyRobot(session['robot_state'])
         robot.right()
         session['robot_state'] = robot.dump_state()
-        return "Success", 200
-    return "Bad Request", 400
+        return {"message": "Success"}, 200
+    return {"message": "Bad Request"}, 400
 
 @app.route("/report", methods=['GET'])
 def report():
@@ -100,4 +92,4 @@ def report():
         robot = ToyRobot(session['robot_state'])
         response = {'location': robot.location, 'direction': str(robot.direction)}
         return jsonify(response), 200
-    return "Bad Request", 400
+    return {"message": "Bad Request"}, 400

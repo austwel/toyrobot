@@ -31,4 +31,4 @@ You can preview the production build with `npm run preview`.
 
 ## Deployment
 
-> The app is automatically deployed on [Azure](https://ms-toyrobot-frontend.azurewebsites.net) via [github action](https://github.com/austwel/toyrobot/blob/main/.github/workflows/main_ms-toyrobot-frontend.yml).
+> The app is automatically deployed on [Azure](https://toyrobot.austwel.xyz) via [github action](https://github.com/austwel/toyrobot/blob/main/.github/workflows/main_ms-toyrobot-frontend.yml).
